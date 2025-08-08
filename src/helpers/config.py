@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings,SettingsConfigDict
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     APP_NAME: str
@@ -8,8 +8,8 @@ class Settings(BaseSettings):
     FILE_DEFAULT_CHUNK_SIZE: int
     MONGO_URI: str
     MONGODB_DATABASE: str
-    class Config:
-        env_file = ".env"
+    
+    model_config = SettingsConfigDict(env_file=".env")
 
 def get_settings():
     return Settings()
