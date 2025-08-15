@@ -19,6 +19,8 @@ class ProcessController(BaseController):
     def get_file_loader(self,file_id:str):
         file_extention = self.get_file_extention(file_id=file_id)
         file_path = self.get_file_path(file_id=file_id)
+        if not os.path.exists(file_path):
+            return None
         if file_extention == ProcessingEnum.PDF.value:
             return PyMuPDFLoader(file_path)
         if file_extention == ProcessingEnum.TXT.value:
@@ -27,7 +29,10 @@ class ProcessController(BaseController):
         
     def get_file_content(self,file_id:str):
         loader = self.get_file_loader(file_id=file_id)
-        return loader.load()    
+        if loader:
+            return loader.load()
+        
+        return None    
     
     def process_file_content(self,file_content:list,file_id:str,chunk_size:int=100,overlap_size:int=20):
         text_splitter = RecursiveCharacterTextSplitter(chunk_size = chunk_size,chunk_overlap = overlap_size,length_function = len )
